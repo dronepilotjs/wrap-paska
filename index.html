@@ -22,7 +22,54 @@ html{overflow-x:clip}
   select,input,.choice button,.action{min-height:44px}
   .hero h1{overflow-wrap:break-word}
 }
+
+/* Walraven design system – matched to dronepilotjs/pacifyre */
+:root{font-family:Arial,Helvetica,sans-serif;color:#333;background:#f5f5f5;--green:#006c4f;--navy:#006c4f;--muted:#666;--line:#e0e0e0}
+body{background:#f5f5f5;color:#333}
+.wr-topline{background:#006c4f;color:white;font-size:12px}
+.wr-topline-inner{max-width:1200px;margin:auto;min-height:38px;padding:6px 22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.wr-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wr-nav a{color:white;text-decoration:none;border:1px solid #ffffff6b;padding:6px 12px;border-radius:6px;font-weight:700;white-space:nowrap}
+.wr-nav a:hover,.wr-nav a:focus-visible{background:#ffffff2d;text-decoration:underline}
+.wr-brand{background:#006c4f;color:white;border-top:1px solid #ffffff2b;border-bottom:3px solid #e5bd37}
+.wr-brand-inner{max-width:1200px;margin:auto;padding:18px 22px;display:flex;align-items:center;gap:18px;min-height:78px}
+.wr-brand-logo{display:inline-flex;align-items:center;min-width:110px;color:white;text-decoration:none}
+.wr-brand-logo img{max-width:172px;height:34px;object-fit:contain}
+.wr-brand-fallback{font-size:20px;font-weight:900;letter-spacing:.04em}
+.wr-brand-sep{height:34px;width:2px;background:#ffffff6b;flex:none}
+#wrBrandTitle{font-weight:800;font-size:18px;flex:1}
+.wr-home{color:#fff;text-decoration:none;padding:9px 12px;border:1px solid #ffffff60;border-radius:7px;font-size:12px;font-weight:bold;white-space:nowrap}
+.wr-home:hover,.wr-home:focus-visible{background:#ffffff25;text-decoration:underline}
+.hero{background:linear-gradient(135deg,#006c4f 0%,#028c66 100%);padding:32px max(22px,calc((100vw - 1120px)/2));color:white}
+.hero p{color:#eff9f4}.hero .eyebrow{color:#ffdc66;opacity:1}
+.panel{border-radius:12px;border:1px solid #e0e0e0;box-shadow:0 4px 16px #003a2510}
+.panel h2{color:#006c4f}
+select,input{border-color:#c8d4d0;color:#333}
+input:focus,select:focus{outline-color:#b1dec9;border-color:#006c4f}
+.choice button.active,.action{background:#006c4f;border-color:#006c4f}
+.result{background:linear-gradient(180deg,#edf8f2,#fff);border-color:#c6e3d3}
+.big,.kicker{color:#006c4f}
+.action.light{background:#e1f1e9;color:#006c4f}
+.foot{border-left-color:#e5bd37}
+.footerlink{color:#006c4f}
+.lang-control{z-index:30}.lang-control label{color:white}.lang-control select{background:#fff;color:#006c4f;border-color:#fff}
+@media(max-width:640px){
+ .wr-topline-inner{align-items:flex-start;padding:10px 16px;gap:10px}
+ .wr-nav{width:100%}.wr-nav a{flex:1;text-align:center}
+ .wr-brand-inner{padding:13px 16px;gap:10px;flex-wrap:wrap}
+ .wr-brand-logo{min-width:0}.wr-brand-logo img{width:116px;height:30px}
+ #wrBrandTitle{font-size:14px}
+ .wr-brand-sep{height:28px}
+ .wr-home{width:100%;text-align:center;min-height:42px;display:grid;place-items:center}
+ .hero{padding:22px 16px}
+ .lang-control{position:static;justify-content:flex-start;margin:0 0 18px}
+ .lang-control select{flex:1;max-width:240px}
+}
+@media(max-width:360px){.wr-topline-inner{font-size:11px}.wr-nav a{padding:8px 5px;font-size:11px}}
+@media print{.wr-topline,.wr-brand{display:none}}
 </style></head><body>
+<div class="wr-topline"><div class="wr-topline-inner"><span id="wrTopline">Multinational with a heart | Since 1942</span><nav class="wr-nav" aria-label="Other Walraven applications"><a href="https://dronepilotjs.github.io/pacifyre/" target="_blank" rel="noopener noreferrer" id="wrLinkPacifyre">Pacifyre® – tmely</a><a href="https://dronepilotjs.github.io/compensation/" target="_blank" rel="noopener noreferrer" id="wrLinkCompensation">Compensation</a></nav></div></div>
+<div class="wr-brand"><div class="wr-brand-inner"><a href="https://www.walraven.com/" class="wr-brand-logo" target="_blank" rel="noopener noreferrer" aria-label="Walraven"><img src="./Walraven_logo.png" alt="Walraven" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"><span class="wr-brand-fallback" style="display:inline">WALRAVEN</span></a><div class="wr-brand-sep"></div><span id="wrBrandTitle">Pacifyre® IWM / FPW</span><a class="wr-home" href="https://dronepilotjs.github.io/home/" id="wrHome">Všechny nástroje</a></div></div>
 <header class="hero"><div class="lang-control"><label for="language" id="languageLabel">Jazyk</label><select id="language" aria-labelledby="languageLabel"><option value="cs">Čeština</option><option value="en">English</option><option value="sk">Slovenčina</option><option value="pl">Polski</option></select></div><div class="eyebrow">WALRAVEN · PACIFYRE</div><h1>Kalkulačka spotřeby protipožární pásky</h1><p>Výběr schválené kombinace z ETA pro Pacifyre IWM III nebo FPW. Výpočet délky zahrnuje postupné zvětšování průměru o 4 mm na každé další vrstvě a technologický přesah 20 mm na jednu ucpávku.</p></header>
 <main><div class="layout"><section class="panel"><h2>Parametry prostupu</h2><p class="sub">Vyplňte parametry potrubí. Počet vrstev se určí pouze ze záznamů dostupných v technických posouzeních.</p><div class="formgrid">
 <div class="field wide"><label>Výrobek</label><div class="choice" id="productChoice"><button type="button" data-value="IWM" class="active">Pacifyre IWM III</button><button type="button" data-value="FPW">Pacifyre FPW</button></div></div>
@@ -5096,4 +5143,20 @@ for(let name of ['product','construction']){const sel=$(name+'Choice');sel.addEv
 $('pipe').addEventListener('change',refillPipe);$('diameter').addEventListener('change',refreshIns);$('ins').addEventListener('change',setIns);for(let id of ['wall','thickness','fire','count','floorThick','roll'])$(id).addEventListener('input',calculate);
 $('print').addEventListener('click',()=>window.print());$('copy').addEventListener('click',()=>{let r=window.lastResult;if(!r)return alert(t('copy_empty'));let msg=t('copy_value',{prod:r.prod,place:t(r.place==='strop'?'floor_inst':'wall_inst'),pipe:r.pipe,d:r.d,w:r.w,ins:t('ins_'+r.ins),th:r.th,classification:r.class,layers:r.layers,one:r.one,count:r.count,total:r.total,src:r.src});navigator.clipboard?.writeText(msg).then(()=>alert(t('copied'))).catch(()=>window.prompt(t('copy_prompt'),msg))||window.prompt(t('copy_prompt'),msg)});
 syncRollLength();pipeNames();$('pipe').value='PVC-U';refillPipe();$('diameter').value='110';refreshIns();$('ins').value='bez';setIns();$('wall').value='5.3';setLanguage(((navigator.languages&&navigator.languages[0])||navigator.language||'cs').toLowerCase().split('-')[0]);
-</script></body></html>
+</script>
+<script>
+/* Independent navigation translations; never replace the language selector DOM. */
+(function(){
+const links={
+ cs:['Mezinárodní společnost se srdcem | Od roku 1942','Pacifyre® – tmely','Compensation','Všechny nástroje'],
+ en:['Multinational with a heart | Since 1942','Pacifyre® – sealants','Compensation','All tools'],
+ sk:['Medzinárodná spoločnosť so srdcom | Od roku 1942','Pacifyre® – tmely','Compensation','Všetky nástroje'],
+ pl:['Międzynarodowa firma z sercem | Od 1942 roku','Pacifyre® – masy uszczelniające','Compensation','Wszystkie narzędzia']
+};
+const ids=['wrTopline','wrLinkPacifyre','wrLinkCompensation','wrHome'];
+function syncNav(){let code=document.getElementById('language').value;const words=links[code]||links.cs;ids.forEach((id,i)=>document.getElementById(id).textContent=words[i]);}
+document.getElementById('language').addEventListener('change',syncNav);
+syncNav();
+})();
+</script>
+</body></html>
