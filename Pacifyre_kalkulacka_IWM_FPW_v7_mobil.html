@@ -1,0 +1,5099 @@
+<!DOCTYPE html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pacifyre | Kalkulačka spotřeby protipožární pásky IWM / FPW</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;color:#172b33;background:#f3f6f7;--green:#087e70;--navy:#102d39;--muted:#637781;--line:#dce6e8}*{box-sizing:border-box}body{margin:0}.hero{background:linear-gradient(105deg,#0c2f3a,#135b5c);padding:36px max(20px,calc((100vw - 1120px)/2));color:white}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;font-weight:700}.hero h1{font-size:clamp(25px,4vw,40px);letter-spacing:-.035em;line-height:1.13;margin:12px 0 10px}.hero p{margin:0;color:#d1e3e3;max-width:700px;line-height:1.6}main{max-width:1120px;margin:28px auto 70px;padding:0 18px}.layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);gap:20px;align-items:start}.panel{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 26px #193b4910;padding:25px}.panel h2{font-size:20px;margin:0 0 6px;letter-spacing:-.02em}.sub{font-size:13px;color:var(--muted);margin:0 0 21px;line-height:1.5}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.field{min-width:0}.field.wide{grid-column:1/-1}label{font-size:13px;font-weight:700;display:block;margin-bottom:7px}select,input{display:block;width:100%;height:44px;border:1px solid #cfdbde;border-radius:9px;background:#fff;padding:0 12px;color:#1b343e;font:inherit;font-size:14px}input:focus,select:focus{outline:3px solid #b1e7de;border-color:var(--green)}.hint{font-size:11px;color:var(--muted);margin:6px 0 0}.choice{display:flex;gap:8px}.choice button{border:1px solid #cfdbde;background:#fff;padding:11px 15px;border-radius:9px;flex:1;font:inherit;font-weight:700;cursor:pointer;color:#435b64}.choice button.active{background:#0f7168;color:#fff;border-color:#0f7168}.result{background:linear-gradient(180deg,#eff9f6,#fff);border:1px solid #cfe5dc;border-radius:14px;padding:20px;margin-top:18px}.result.warn{background:#fff9ed;border-color:#eadab8}.kicker{font-size:11px;font-weight:800;color:#547a73;letter-spacing:.08em;text-transform:uppercase}.big{font-size:clamp(38px,5vw,56px);font-weight:800;line-height:1.2;color:#0f665b;font-variant-numeric:tabular-nums;margin-top:5px}.result.warn .big{font-size:23px;color:#825713}.secondary{color:#50666e;font-size:13px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}.metric{border:1px solid #dce9e8;border-radius:11px;background:#fff;padding:12px}.metric strong{display:block;font-size:21px;margin-top:4px}.metric span{font-size:11px;color:#64777f}.line{border-top:1px solid #dce6e8;margin:17px 0}.detail{display:flex;justify-content:space-between;gap:14px;margin:10px 0;font-size:13px}.detail span:first-child{color:#637780}.detail span:last-child{text-align:right;font-weight:700}.buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.action{border:0;background:#0a6e64;color:white;font:inherit;font-size:13px;font-weight:750;border-radius:9px;padding:11px 14px;cursor:pointer}.action.light{background:#e5f2f0;color:#175a54}.source{font-size:12px;line-height:1.6;color:#556e75;margin-top:12px}.foot{margin-top:22px;background:#fff;border-left:4px solid #108576;border-radius:8px;padding:17px 20px;font-size:13px;line-height:1.6}.tiny{font-size:12px;color:#71818a;line-height:1.6;margin-top:16px}.pill{display:inline-block;padding:4px 9px;background:#eaf4f2;border-radius:30px;font-size:11px;font-weight:700;color:#186e63}.help{margin-top:25px}.help h3{font-size:15px;margin:0 0 7px}.help p{font-size:13px;line-height:1.65;color:#526971;margin:0 0 12px}#candidates{font-size:12px;color:#617882;margin:7px 0}.error{font-size:12px;color:#a13626}.footerlink{color:#0a746b;text-decoration:underline}@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:19px}}@media(max-width:470px){.formgrid{grid-template-columns:1fr}.field.wide{grid-column:1}.metrics{grid-template-columns:1fr 1fr}.hero{padding:26px 18px}}@media print{.hero{background:none;color:black;padding:5px 0 20px}.hero p{color:#555}main{margin:0;max-width:none}.layout{display:block}.panel{box-shadow:none;border:0;padding:0}.panel:first-child{display:none}.buttons{display:none}.foot{border:1px solid #ccc}.result{break-inside:avoid}}
+.hero{position:relative}.lang-control{position:absolute;z-index:20;top:22px;right:max(18px,calc((100vw - 1120px)/2));display:flex;align-items:center;gap:9px}.lang-control label{margin:0;color:#e5f4f2;font-size:13px}.lang-control select{width:auto;min-width:145px;height:36px;background:#f9ffff;border-color:#a4d2d0;font-size:13px;padding:0 9px}.hero .eyebrow{padding-right:190px}@media(max-width:560px){.lang-control{position:static;justify-content:flex-end;margin-bottom:14px}.hero .eyebrow{padding-right:0}}@media print{.lang-control{display:none}}
+
+/* Mobilní ergonomie: žádné horizontální přetékání a přehlednější výsledky. */
+html{overflow-x:clip}
+.layout,.formgrid,.panel,.metric,.detail{min-width:0}
+.metric strong,.detail span{overflow-wrap:anywhere}
+@media(max-width:370px){
+  .metrics{grid-template-columns:1fr 1fr;gap:8px}
+  .metric{padding:10px}
+  .metric strong{font-size:18px;line-height:1.3}
+  .metric span{font-size:11px}
+  .choice button{min-width:0;padding:12px 7px;overflow-wrap:anywhere}
+  .buttons .action{width:100%;min-height:44px}
+  .panel{padding:15px}
+  .result{padding:14px}
+}
+@media(max-width:560px){
+  .lang-control select{min-width:140px;min-height:44px}
+  select,input,.choice button,.action{min-height:44px}
+  .hero h1{overflow-wrap:break-word}
+}
+</style></head><body>
+<header class="hero"><div class="lang-control"><label for="language" id="languageLabel">Jazyk</label><select id="language" aria-labelledby="languageLabel"><option value="cs">Čeština</option><option value="en">English</option><option value="sk">Slovenčina</option><option value="pl">Polski</option></select></div><div class="eyebrow">WALRAVEN · PACIFYRE</div><h1>Kalkulačka spotřeby protipožární pásky</h1><p>Výběr schválené kombinace z ETA pro Pacifyre IWM III nebo FPW. Výpočet délky zahrnuje postupné zvětšování průměru o 4 mm na každé další vrstvě a technologický přesah 20 mm na jednu ucpávku.</p></header>
+<main><div class="layout"><section class="panel"><h2>Parametry prostupu</h2><p class="sub">Vyplňte parametry potrubí. Počet vrstev se určí pouze ze záznamů dostupných v technických posouzeních.</p><div class="formgrid">
+<div class="field wide"><label>Výrobek</label><div class="choice" id="productChoice"><button type="button" data-value="IWM" class="active">Pacifyre IWM III</button><button type="button" data-value="FPW">Pacifyre FPW</button></div></div>
+<div class="field wide"><label>Typ konstrukce</label><div class="choice" id="constructionChoice"><button type="button" data-value="strop" class="active">Strop (1 ucpávka)</button><button type="button" data-value="stena">Stěna (2 ucpávky)</button></div></div>
+<div class="field wide"><label for="pipe">Materiál / systém potrubí</label><select id="pipe"></select></div>
+<div class="field"><label for="diameter">Vnější průměr potrubí (mm)</label><select id="diameter"></select><p class="hint">Jen dimenze zastoupené ve vybraných ETA</p></div>
+<div class="field"><label for="wall">Tloušťka stěny potrubí (mm)</label><input id="wall" type="number" min="0.1" max="40" step="0.1" placeholder="např. 3,4"><p class="hint">Údaj z označení / dokumentace potrubí</p></div>
+<div class="field"><label for="ins">Izolace potrubí</label><select id="ins"></select></div>
+<div class="field"><label for="thickness">Tloušťka izolace (mm)</label><input id="thickness" type="number" min="0" max="60" step="0.1" value="0"></div>
+<div class="field"><label for="fire">Požadovaná odolnost</label><select id="fire"><option value="30">EI 30</option><option value="60">EI 60</option><option value="90">EI 90</option><option value="120" selected>EI 120</option><option value="240">EI 240</option></select></div>
+<div class="field"><label for="count">Počet prostupů</label><input id="count" type="number" min="1" max="100000" value="1" step="1"></div>
+<div class="field" id="floorField"><label for="floorThick">Tloušťka stropu (mm)</label><input id="floorThick" type="number" min="1" step="1" value="150"><p class="hint">Obvykle alespoň 150 mm</p></div>
+<div class="field"><label for="roll">Délka jedné role (m)</label><input id="roll" type="number" min="0" step="0.1" value="12.5" readonly aria-readonly="true"><p class="hint">IWM III: 12,5 m / role · FPW: 9,2 m / role. Délka se nastavuje automaticky podle výrobku.</p></div>
+</div><p id="candidates"></p></section>
+<section class="panel"><h2>Výsledek výpočtu</h2><p class="sub">Výsledky jsou v metrech pásky; montážní požadavky a klasifikaci vždy ověřte v ETA.</p><div class="result" id="result"><div class="kicker" id="status">Výsledek</div><div class="big" id="total">–</div><p class="secondary" id="summary">Vyberte parametry potrubí.</p><div class="metrics"><div class="metric"><span>Počet vrstev na 1 ucpávku</span><strong id="layers">–</strong></div><div class="metric"><span>Délka na 1 ucpávku</span><strong id="one">–</strong></div><div class="metric"><span>Počet ucpávek celkem</span><strong id="seals">–</strong></div><div class="metric"><span>Potřebné role</span><strong id="rolls">–</strong></div></div><div class="line"></div><div class="detail"><span>Certifikovaná klasifikace</span><span id="class">–</span></div><div class="detail"><span>Typ vyplnění spáry</span><span id="sealType">–</span></div><div class="detail"><span>Geometrická délka + přesah</span><span id="formula">–</span></div><div class="detail"><span>Zdroj ETA</span><span id="origin">–</span></div></div><div class="source" id="extra"></div><div class="buttons"><button class="action" id="print" type="button">Vytisknout výpočet / PDF</button><button class="action light" id="copy" type="button">Kopírovat výsledek</button></div><div class="help"><h3>Jak se počítá délka</h3><p>U každé vrstvy se přičítá 4 mm k průměru (páska má tloušťku 2 mm po obvodu na obou stranách). K součtu obvodů se přidá <b>20 mm přesah na každou ucpávku</b>. Izolace se započítá dvakrát do výchozího průměru. Délka se zobrazuje zaokrouhlená nahoru na celé milimetry.</p><p>Pokud pro zadané parametry neexistuje přesný odpovídající záznam, kalkulačka neprovede automatické přiblížení na jinou dimenzi ani jiný druh izolace.</p></div></section></div>
+<div class="foot"><b>Upozornění:</b> Výchozí výpočet spotřeby protipožární pásky je proveden pro prostup stropem (jedna ucpávka). V případě běžného prostupu stěnou je nutné vypočtené množství zdvojnásobit, protože se ucpávka instaluje z obou stran stěny. Po přepnutí na „Stěna“ kalkulačka toto zdvojnásobení provede automaticky. Speciální šachtové stěny a systémy s minerální deskou jsou mimo rozsah této kalkulačky.</div>
+<p class="tiny">Zdroje: <a class="footerlink" href="ETA-18-0918-Walraven-Pacifyre-IWM-III-INT.pdf" target="_blank">ETA-18/0918 (IWM III, 24. 10. 2018)</a> a <a class="footerlink" href="ETA-22-0022-Walraven-Pacifyre-FPW-INT.pdf" target="_blank">ETA-22/0022 (FPW, 17. 2. 2022)</a>. Toto je kalkulační pomůcka, nikoli osvědčení požární bezpečnosti. Údaje v ETA mohou mít další omezení (systém ucpávky, tloušťka a materiál konstrukce, řešení spáry, podpěry, okrajové podmínky potrubí U/U vs U/C). Geometrický výpočet spotřeby je odhad bez výrobních tolerancí nebo odpadu kromě dohodnutého přesahu. Před montáží vždy ověřte požadované klasifikace a instalační detaily v příslušné ETA.</p>
+</main>
+<script>const DATA=[
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "4mm PE zvuková izolace",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      2.2,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "4mm PE zvuková izolace",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      2.2,
+      12.3,
+      true,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "4mm PE zvuková izolace",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      2.7,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      17,
+      18
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 14,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      50,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "PP",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Wavin SiTECH",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 2,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Wavin SiTECH",
+    "diam": [
+      50,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      2,
+      2.55,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Wavin SiTECH",
+    "diam": [
+      50,
+      90,
+      true,
+      false
+    ],
+    "wall": [
+      2,
+      3.05,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Wavin SiTECH",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      2,
+      3.7,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 16,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 17,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 3.5,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 3.5,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 3.5,
+    "layers": 2,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      12.5,
+      18
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      25,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "stena",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 50,
+    "wall": 3.7,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 240,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 160,
+    "wall": 4.7,
+    "layers": 6,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 240,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": 12.3,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      18
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      true
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      23
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 110,
+    "wall": 12.3,
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      15.5,
+      23
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      12.3,
+      false,
+      true
+    ],
+    "layers": 5,
+    "ins": "AF",
+    "insrange": [
+      12.5,
+      31.5
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": 12.3,
+    "layers": 5,
+    "ins": "AF",
+    "insrange": [
+      12.5,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 19,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 50,
+    "wall": 4.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 240,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 110,
+    "wall": 6.3,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 240,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      50,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      1.9,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      75,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.9,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 110,
+    "wall": 10,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 110,
+    "wall": 10,
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 90,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 110,
+    "wall": 10,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9.5,
+      18
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      9.5,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PP",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PP",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PP",
+    "diam": [
+      0,
+      50,
+      false,
+      false
+    ],
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PP",
+    "diam": [
+      50,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PP",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "PP",
+    "diam": [
+      0,
+      110,
+      false,
+      false
+    ],
+    "wall": [
+      1.8,
+      10,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Wavin SiTECH",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Wavin SiTECH",
+    "diam": 75,
+    "wall": [
+      2,
+      2.55,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Wavin SiTECH",
+    "diam": 90,
+    "wall": [
+      2,
+      3.05,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Wavin SiTECH",
+    "diam": 110,
+    "wall": [
+      2,
+      3.7,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 21,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "POLO-KAL NG",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "POLO-KAL NG",
+    "diam": 75,
+    "wall": [
+      2,
+      2.5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "POLO-KAL NG",
+    "diam": 90,
+    "wall": [
+      2,
+      2.9,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "POLO-KAL NG",
+    "diam": 110,
+    "wall": [
+      2,
+      3.4,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 75,
+    "wall": [
+      2,
+      2.5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 90,
+    "wall": [
+      2,
+      3.1,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 110,
+    "wall": [
+      2,
+      3.6,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 22,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano",
+    "diam": 50,
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano",
+    "diam": 75,
+    "wall": [
+      1.8,
+      2.1,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano",
+    "diam": 90,
+    "wall": [
+      1.8,
+      2.4,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano",
+    "diam": 110,
+    "wall": [
+      1.8,
+      2.7,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Aquatherm green pipe MS",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      5.6,
+      10.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Uponor MLC",
+    "diam": [
+      40,
+      110,
+      true,
+      false
+    ],
+    "wall": [
+      10.4,
+      15.2,
+      true,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 24,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Alpex Duo",
+    "diam": [
+      0,
+      40,
+      false,
+      false
+    ],
+    "wall": 3.5,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 25,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 25,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/C",
+    "page": 25,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 5,
+    "ins": "PE",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 25,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      0,
+      9.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 25,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "IWM",
+    "construction": "strop",
+    "pipe": "Alpex Duo",
+    "diam": [
+      40,
+      75,
+      true,
+      false
+    ],
+    "wall": [
+      3.5,
+      5,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      0,
+      31.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 25,
+    "notes": "",
+    "seal": "",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": 50,
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": 75,
+    "wall": [
+      1.8,
+      8.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": 110,
+    "wall": [
+      2.2,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": 110,
+    "wall": 2.2,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": 160,
+    "wall": [
+      3.2,
+      11.8,
+      false,
+      false
+    ],
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 60,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PVC-U",
+    "diam": 160,
+    "wall": 3.2,
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 50,
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 75,
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 75,
+    "wall": 1.8,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 110,
+    "wall": [
+      2.2,
+      8.2,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 110,
+    "wall": 2.2,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PVC-U",
+    "diam": 160,
+    "wall": [
+      3.2,
+      11.8,
+      false,
+      false
+    ],
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": 50,
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": 50,
+    "wall": 5.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": 75,
+    "wall": [
+      1.8,
+      8.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": 110,
+    "wall": [
+      2.2,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": 160,
+    "wall": [
+      3.2,
+      11.8,
+      false,
+      false
+    ],
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 60,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PE-HD",
+    "diam": 160,
+    "wall": 3.2,
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 14,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 50,
+    "wall": [
+      1.8,
+      5.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 75,
+    "wall": [
+      1.8,
+      8.4,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 110,
+    "wall": [
+      2.2,
+      12.3,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 160,
+    "wall": [
+      3.2,
+      11.8,
+      false,
+      false
+    ],
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 30,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PE-HD",
+    "diam": 160,
+    "wall": 3.2,
+    "layers": 7,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 60,
+    "term": "U/C",
+    "page": 20,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PP-H",
+    "diam": 50,
+    "wall": [
+      2,
+      4.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PP-H",
+    "diam": 75,
+    "wall": [
+      1.9,
+      6.9,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "PP-H",
+    "diam": 110,
+    "wall": [
+      2.7,
+      10,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Geberit Silent PP",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Geberit Silent PP",
+    "diam": 75,
+    "wall": 2.4,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Geberit Silent PP",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Geberit Silent Pro",
+    "diam": 50,
+    "wall": 2.7,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Geberit Silent Pro",
+    "diam": 75,
+    "wall": 3.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Geberit Silent Pro",
+    "diam": 110,
+    "wall": 4.2,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Georg Fischer Silenta Premium",
+    "diam": 50,
+    "wall": 4,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Georg Fischer Silenta Premium",
+    "diam": 75,
+    "wall": 4.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Georg Fischer Silenta Premium",
+    "diam": 110,
+    "wall": 4.3,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 15,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Conel Drainpipes",
+    "diam": 50,
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Conel Drainpipes",
+    "diam": 75,
+    "wall": 1.9,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Conel Drainpipes",
+    "diam": 110,
+    "wall": 2.7,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 90,
+    "term": "U/U",
+    "page": 15,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Wavin AS+",
+    "diam": 50,
+    "wall": 3,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Wavin AS+",
+    "diam": 75,
+    "wall": 3.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Wavin AS+",
+    "diam": 110,
+    "wall": 5.3,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Wavin SiTech+",
+    "diam": 50,
+    "wall": 1.3,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Wavin SiTech+",
+    "diam": 75,
+    "wall": 2.6,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Wavin SiTech+",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "POLO-KAL NG",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "POLO-KAL NG",
+    "diam": 75,
+    "wall": 2.6,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "POLO-KAL NG",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "POLO-KAL 3S",
+    "diam": 75,
+    "wall": 2.6,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "POLO-KAL 3S",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Rehau Raupiano plus",
+    "diam": 50,
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Rehau Raupiano plus",
+    "diam": 75,
+    "wall": 1.9,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Rehau Raupiano plus",
+    "diam": 110,
+    "wall": 2.7,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 16,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PP-H",
+    "diam": 50,
+    "wall": [
+      2,
+      4.6,
+      false,
+      false
+    ],
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PP-H",
+    "diam": 75,
+    "wall": [
+      1.9,
+      6.9,
+      false,
+      false
+    ],
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "PP-H",
+    "diam": 110,
+    "wall": [
+      2.7,
+      10,
+      false,
+      false
+    ],
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 75,
+    "wall": 2.4,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Geberit Silent PP",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Geberit Silent Pro",
+    "diam": 50,
+    "wall": 2.7,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Geberit Silent Pro",
+    "diam": 75,
+    "wall": 3.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Geberit Silent Pro",
+    "diam": 110,
+    "wall": 4.2,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Georg Fischer Silenta Premium",
+    "diam": 50,
+    "wall": 4,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Georg Fischer Silenta Premium",
+    "diam": 75,
+    "wall": 4.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Georg Fischer Silenta Premium",
+    "diam": 110,
+    "wall": 4.3,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Conel Drainpipes",
+    "diam": 50,
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Conel Drainpipes",
+    "diam": 75,
+    "wall": 1.9,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 21,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Wavin AS+",
+    "diam": 50,
+    "wall": 3,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Wavin AS+",
+    "diam": 75,
+    "wall": 3.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Wavin AS+",
+    "diam": 110,
+    "wall": 5.3,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Wavin SiTech+",
+    "diam": 50,
+    "wall": 1.3,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Wavin SiTech+",
+    "diam": 75,
+    "wall": 2.6,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Wavin SiTech+",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 60,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A",
+    "minfloor": 201
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "POLO-KAL NG",
+    "diam": 50,
+    "wall": 2,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "POLO-KAL NG",
+    "diam": 75,
+    "wall": 2.6,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "POLO-KAL 3S",
+    "diam": 75,
+    "wall": 2.6,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "POLO-KAL 3S",
+    "diam": 110,
+    "wall": 3.4,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano plus",
+    "diam": 50,
+    "wall": 1.8,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano plus",
+    "diam": 75,
+    "wall": 1.9,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Rehau Raupiano plus",
+    "diam": 110,
+    "wall": 2.7,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/U",
+    "page": 22,
+    "notes": "",
+    "seal": "A",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Aquatherm SDR9 MF RP",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Aquatherm SDR9 MF RP",
+    "diam": [
+      32,
+      63,
+      true,
+      false
+    ],
+    "wall": 7.1,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      32,
+      63,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9,
+      27
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      32,
+      63,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      9,
+      39
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      32,
+      50,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      50,
+      63,
+      true,
+      false
+    ],
+    "wall": 6,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      63,
+      110,
+      true,
+      false
+    ],
+    "wall": 10,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9,
+      19
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      32,
+      50,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9,
+      37.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "stena",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      50,
+      63,
+      true,
+      false
+    ],
+    "wall": 6,
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      9,
+      39
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 18,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Aquatherm SDR9 MF RP",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3.6,
+    "layers": 2,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Aquatherm SDR9 MF RP",
+    "diam": [
+      32,
+      63,
+      true,
+      false
+    ],
+    "wall": 7.1,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Aquatherm SDR9 MF RP",
+    "diam": [
+      63,
+      110,
+      true,
+      false
+    ],
+    "wall": 12.3,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      32,
+      63,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9,
+      27
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Alpex F50 PROFI / L",
+    "diam": [
+      32,
+      63,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      9,
+      39
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      32,
+      50,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 3,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      50,
+      63,
+      true,
+      false
+    ],
+    "wall": 6,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      63,
+      110,
+      true,
+      false
+    ],
+    "wall": 10,
+    "layers": 4,
+    "ins": "bez",
+    "insrange": null,
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      0,
+      32,
+      false,
+      false
+    ],
+    "wall": 3,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9,
+      19
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      32,
+      50,
+      true,
+      false
+    ],
+    "wall": 4.5,
+    "layers": 3,
+    "ins": "AF",
+    "insrange": [
+      9,
+      37.5
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  },
+  {
+    "product": "FPW",
+    "construction": "strop",
+    "pipe": "Uponor Unipipe MLCP",
+    "diam": [
+      50,
+      63,
+      true,
+      false
+    ],
+    "wall": 6,
+    "layers": 4,
+    "ins": "AF",
+    "insrange": [
+      9,
+      39
+    ],
+    "ei": 120,
+    "term": "U/C",
+    "page": 23,
+    "notes": "",
+    "seal": "A+M",
+    "minfloor": null
+  }
+];
+
+const I18N_STATIC = {"Jazyk": {"en": "Language", "sk": "Jazyk", "pl": "Język"}, "Kalkulačka spotřeby protipožární pásky": {"en": "Fire protection wrap consumption calculator", "sk": "Kalkulačka spotreby protipožiarnej pásky", "pl": "Kalkulator zużycia taśmy ogniochronnej"}, "Výběr schválené kombinace z ETA pro Pacifyre IWM III nebo FPW. Výpočet délky zahrnuje postupné zvětšování průměru o 4 mm na každé další vrstvě a technologický přesah 20 mm na jednu ucpávku.": {"en": "Choose an ETA-approved configuration for Pacifyre IWM III or FPW. Length calculations account for a 4 mm diameter increase with each additional layer and a 20 mm installation overlap per seal.", "sk": "Výber schválenej kombinácie z ETA pre Pacifyre IWM III alebo FPW. Výpočet dĺžky zahŕňa postupné zväčšovanie priemeru o 4 mm pri každej ďalšej vrstve a technologický presah 20 mm na jednu upchávku.", "pl": "Wybierz konfigurację zgodną z ETA dla Pacifyre IWM III lub FPW. Obliczenie długości uwzględnia wzrost średnicy o 4 mm przy każdej kolejnej warstwie oraz zakład montażowy 20 mm na jedno uszczelnienie."}, "Parametry prostupu": {"en": "Penetration parameters", "sk": "Parametre prestupu", "pl": "Parametry przejścia"}, "Vyplňte parametry potrubí. Počet vrstev se určí pouze ze záznamů dostupných v technických posouzeních.": {"en": "Enter the pipe parameters. Layer counts are determined only from records in the technical assessments.", "sk": "Vyplňte parametre potrubia. Počet vrstiev sa určí výlučne zo záznamov v technických posúdeniach.", "pl": "Wprowadź parametry rury. Liczba warstw jest ustalana wyłącznie na podstawie danych z ocen technicznych."}, "Výrobek": {"en": "Product", "sk": "Výrobok", "pl": "Produkt"}, "Typ konstrukce": {"en": "Construction type", "sk": "Typ konštrukcie", "pl": "Rodzaj przegrody"}, "Strop (1 ucpávka)": {"en": "Floor (1 seal)", "sk": "Strop (1 upchávka)", "pl": "Strop (1 uszczelnienie)"}, "Stěna (2 ucpávky)": {"en": "Wall (2 seals)", "sk": "Stena (2 upchávky)", "pl": "Ściana (2 uszczelnienia)"}, "Materiál / systém potrubí": {"en": "Pipe material / system", "sk": "Materiál / systém potrubia", "pl": "Materiał / system rur"}, "Vnější průměr potrubí (mm)": {"en": "Pipe outer diameter (mm)", "sk": "Vonkajší priemer potrubia (mm)", "pl": "Średnica zewnętrzna rury (mm)"}, "Jen dimenze zastoupené ve vybraných ETA": {"en": "Only sizes covered by the selected ETA", "sk": "Len rozmery uvedené vo vybraných ETA", "pl": "Tylko średnice objęte wybraną ETA"}, "Tloušťka stěny potrubí (mm)": {"en": "Pipe wall thickness (mm)", "sk": "Hrúbka steny potrubia (mm)", "pl": "Grubość ścianki rury (mm)"}, "Údaj z označení / dokumentace potrubí": {"en": "From pipe marking / documentation", "sk": "Podľa označenia / dokumentácie potrubia", "pl": "Z oznaczenia / dokumentacji rury"}, "Izolace potrubí": {"en": "Pipe insulation", "sk": "Izolácia potrubia", "pl": "Izolacja rury"}, "Tloušťka izolace (mm)": {"en": "Insulation thickness (mm)", "sk": "Hrúbka izolácie (mm)", "pl": "Grubość izolacji (mm)"}, "Požadovaná odolnost": {"en": "Required fire resistance", "sk": "Požadovaná požiarna odolnosť", "pl": "Wymagana odporność ogniowa"}, "Počet prostupů": {"en": "Number of penetrations", "sk": "Počet prestupov", "pl": "Liczba przejść"}, "Tloušťka stropu (mm)": {"en": "Floor thickness (mm)", "sk": "Hrúbka stropu (mm)", "pl": "Grubość stropu (mm)"}, "Obvykle alespoň 150 mm": {"en": "Usually at least 150 mm", "sk": "Zvyčajne aspoň 150 mm", "pl": "Zwykle co najmniej 150 mm"}, "Délka jedné role (m), volitelné": {"en": "Roll length (m), optional", "sk": "Dĺžka jednej rolky (m), voliteľné", "pl": "Długość rolki (m), opcjonalnie"}, "Pro odhad potřebného počtu rolí": {"en": "To estimate the number of rolls needed", "sk": "Na odhad potrebného počtu roliek", "pl": "Do oszacowania liczby potrzebnych rolek"}, "Výsledek výpočtu": {"en": "Calculation result", "sk": "Výsledok výpočtu", "pl": "Wynik obliczeń"}, "Výsledky jsou v metrech pásky; montážní požadavky a klasifikaci vždy ověřte v ETA.": {"en": "Results are in metres of wrap; always verify installation requirements and classification in the ETA.", "sk": "Výsledky sú v metroch pásky; montážne požiadavky a klasifikáciu vždy overte v ETA.", "pl": "Wyniki podano w metrach taśmy; wymagania montażowe i klasyfikację należy zawsze sprawdzić w ETA."}, "Výsledek": {"en": "Result", "sk": "Výsledok", "pl": "Wynik"}, "Vyberte parametry potrubí.": {"en": "Select pipe parameters.", "sk": "Vyberte parametre potrubia.", "pl": "Wybierz parametry rury."}, "Počet vrstev na 1 ucpávku": {"en": "Layers per seal", "sk": "Počet vrstiev na 1 upchávku", "pl": "Liczba warstw na uszczelnienie"}, "Délka na 1 ucpávku": {"en": "Length per seal", "sk": "Dĺžka na 1 upchávku", "pl": "Długość na uszczelnienie"}, "Počet ucpávek celkem": {"en": "Total number of seals", "sk": "Celkový počet upchávok", "pl": "Łączna liczba uszczelnień"}, "Potřebné role (volitelné)": {"en": "Rolls required (optional)", "sk": "Potrebné rolky (voliteľné)", "pl": "Potrzebne rolki (opcjonalnie)"}, "Certifikovaná klasifikace": {"en": "Certified classification", "sk": "Certifikovaná klasifikácia", "pl": "Klasyfikacja ogniowa"}, "Typ vyplnění spáry": {"en": "Gap filler type", "sk": "Typ výplne škáry", "pl": "Rodzaj wypełnienia szczeliny"}, "Geometrická délka + přesah": {"en": "Geometric length + overlap", "sk": "Geometrická dĺžka + presah", "pl": "Długość geometryczna + zakład"}, "Zdroj ETA": {"en": "ETA source", "sk": "Zdroj ETA", "pl": "Źródło ETA"}, "Vytisknout výpočet / PDF": {"en": "Print calculation / PDF", "sk": "Vytlačiť výpočet / PDF", "pl": "Drukuj obliczenie / PDF"}, "Kopírovat výsledek": {"en": "Copy result", "sk": "Kopírovať výsledok", "pl": "Kopiuj wynik"}, "Jak se počítá délka": {"en": "How length is calculated", "sk": "Ako sa počíta dĺžka", "pl": "Jak obliczana jest długość"}, "U každé vrstvy se přičítá 4 mm k průměru (páska má tloušťku 2 mm po obvodu na obou stranách). K součtu obvodů se přidá": {"en": "Each layer adds 4 mm to the diameter (the wrap is 2 mm thick on both sides). Add", "sk": "Pri každej vrstve sa k priemeru pripočítajú 4 mm (páska má na oboch stranách hrúbku 2 mm). K súčtu obvodov sa pripočíta", "pl": "Do średnicy każdej kolejnej warstwy dodaje się 4 mm (grubość taśmy wynosi 2 mm z każdej strony). Do sumy obwodów dodaje się"}, "20 mm přesah na každou ucpávku": {"en": "20 mm overlap per seal", "sk": "20 mm presah na každú upchávku", "pl": "zakład 20 mm na każde uszczelnienie"}, ". Izolace se započítá dvakrát do výchozího průměru. Délka se zobrazuje zaokrouhlená nahoru na celé milimetry.": {"en": ". Insulation thickness is counted twice in the initial diameter. Length is rounded up to full millimetres.", "sk": ". Hrúbka izolácie sa do východiskového priemeru započíta dvakrát. Dĺžka sa zaokrúhľuje nahor na celé milimetre.", "pl": ". Grubość izolacji jest uwzględniana dwukrotnie w średnicy początkowej. Długość zaokrągla się w górę do pełnych milimetrów."}, "Pokud pro zadané parametry neexistuje přesný odpovídající záznam, kalkulačka neprovede automatické přiblížení na jinou dimenzi ani jiný druh izolace.": {"en": "If there is no matching approved record for the entered parameters, the calculator does not substitute another pipe size or insulation type.", "sk": "Ak pre zadané parametre neexistuje zodpovedajúci schválený záznam, kalkulačka nenahrádza parametre inou dimenziou ani druhom izolácie.", "pl": "Jeśli nie ma zatwierdzonego wpisu dla podanych parametrów, kalkulator nie zastępuje ich inną średnicą ani rodzajem izolacji."}, "Upozornění:": {"en": "Notice:", "sk": "Upozornenie:", "pl": "Uwaga:"}, "Výchozí výpočet spotřeby protipožární pásky je proveden pro prostup stropem (jedna ucpávka). V případě běžného prostupu stěnou je nutné vypočtené množství zdvojnásobit, protože se ucpávka instaluje z obou stran stěny. Po přepnutí na „Stěna“ kalkulačka toto zdvojnásobení provede automaticky. Speciální šachtové stěny a systémy s minerální deskou jsou mimo rozsah této kalkulačky.": {"en": "The default calculation is for a floor penetration (one seal). For a standard wall penetration, double the quantity because one seal is installed on each side of the wall. Selecting “Wall” automatically doubles the quantity. Special shaft walls and mineral-wool-board systems are outside the scope of this calculator.", "sk": "Predvolený výpočet platí pre prestup stropom (jedna upchávka). Pri bežnom prestupe stenou je potrebné množstvo zdvojnásobiť, pretože upchávka sa montuje na obe strany steny. Po prepnutí na „Stena“ kalkulačka množstvo automaticky zdvojnásobí. Špeciálne šachtové steny a systémy s minerálnou doskou nie sú zahrnuté.", "pl": "Domyślne obliczenie dotyczy przejścia przez strop (jedno uszczelnienie). Dla typowego przejścia przez ścianę ilość należy podwoić, ponieważ uszczelnienie montuje się po obu stronach ściany. Wybranie „Ściana” automatycznie podwaja ilość. Specjalne ściany szachtowe i systemy z płytą z wełny mineralnej nie są objęte kalkulatorem."}, "Zdroje:": {"en": "Sources:", "sk": "Zdroje:", "pl": "Źródła:"}, ". Toto je kalkulační pomůcka, nikoli osvědčení požární bezpečnosti. Údaje v ETA mohou mít další omezení (systém ucpávky, tloušťka a materiál konstrukce, řešení spáry, podpěry, okrajové podmínky potrubí U/U vs U/C). Geometrický výpočet spotřeby je odhad bez výrobních tolerancí nebo odpadu kromě dohodnutého přesahu. Před montáží vždy ověřte požadované klasifikace a instalační detaily v příslušné ETA.": {"en": ". This calculator is an estimation tool, not a fire safety certificate. ETA data may have additional restrictions (sealing system, construction thickness and material, gap filler, supports and pipe end conditions U/U vs U/C). The geometric length is an estimate without manufacturing tolerances or waste beyond the agreed overlap. Always check the applicable ETA classification and installation details before installation.", "sk": ". Ide o kalkulačnú pomôcku, nie o osvedčenie požiarnej bezpečnosti. Údaje v ETA môžu obsahovať ďalšie obmedzenia (systém upchávky, hrúbka a materiál konštrukcie, výplň škáry, podpery a podmienky koncov potrubia U/U vs U/C). Geometrická dĺžka je odhad bez výrobných tolerancií či odpadu okrem dohodnutého presahu. Pred montážou vždy overte klasifikáciu a montážne detaily v príslušnej ETA.", "pl": ". Kalkulator jest narzędziem szacunkowym, a nie certyfikatem bezpieczeństwa pożarowego. Dane ETA mogą podlegać dodatkowym ograniczeniom (system uszczelnienia, grubość i materiał przegrody, wypełnienie szczeliny, podpory, warunki końców rur U/U lub U/C). Długość geometryczna jest szacunkiem bez tolerancji produkcyjnych i strat innych niż ustalony zakład. Przed montażem sprawdź klasyfikację i szczegóły instalacji w odpowiedniej ETA."}};
+I18N_STATIC["Délka jedné role (m)"]={en:"Length per roll (m)",sk:"Dĺžka jednej rolky (m)",pl:"Długość jednej rolki (m)"};
+I18N_STATIC["IWM III: 12,5 m / role · FPW: 9,2 m / role. Délka se nastavuje automaticky podle výrobku."]={en:"IWM III: 12.5 m per roll · FPW: 9.2 m per roll. Roll length is set automatically by product.",sk:"IWM III: 12,5 m na rolku · FPW: 9,2 m na rolku. Dĺžka sa nastavuje automaticky podľa výrobku.",pl:"IWM III: 12,5 m na rolkę · FPW: 9,2 m na rolkę. Długość jest ustawiana automatycznie według produktu."};
+I18N_STATIC["Potřebné role"]={en:"Rolls required",sk:"Potrebné rolky",pl:"Potrzebne rolki"};
+const I18N_DYNAMIC = {"ins_bez": {"cs": "Bez izolace", "en": "No insulation", "sk": "Bez izolácie", "pl": "Bez izolacji"}, "ins_PE": {"cs": "PE zvuková izolace (4 mm)", "en": "PE acoustic insulation (4 mm)", "sk": "PE zvuková izolácia (4 mm)", "pl": "Izolacja akustyczna PE (4 mm)"}, "ins_AF": {"cs": "Elastomerová izolace (AF/Armaflex)", "en": "Elastomeric insulation (AF/Armaflex)", "sk": "Elastomérová izolácia (AF/Armaflex)", "pl": "Izolacja elastomerowa (AF/Armaflex)"}, "cannot_confirm": {"cs": "Výpočet nelze potvrdit", "en": "Calculation cannot be confirmed", "sk": "Výpočet nie je možné potvrdiť", "pl": "Nie można potwierdzić obliczenia"}, "adjust_params": {"cs": "Zadejte nebo upravte parametry v rozsahu příslušného ETA.", "en": "Enter or adjust parameters within the applicable ETA.", "sk": "Zadajte alebo upravte parametre v rozsahu príslušnej ETA.", "pl": "Wprowadź lub dostosuj parametry zgodnie z odpowiednią ETA."}, "no_infer": {"cs": "Není dovoleno odvozovat počet vrstev pouze podle podobného průměru nebo jiného potrubí.", "en": "Do not infer the number of layers from a similar diameter or different pipe.", "sk": "Počet vrstiev sa nesmie odvodzovať iba z podobného priemeru alebo iného potrubia.", "pl": "Nie należy wyznaczać liczby warstw na podstawie podobnej średnicy ani innego rodzaju rury."}, "err_diameter": {"cs": "Vyberte průměr potrubí.", "en": "Select a pipe diameter.", "sk": "Vyberte priemer potrubia.", "pl": "Wybierz średnicę rury."}, "err_wall": {"cs": "Doplňte tloušťku stěny potrubí.", "en": "Enter the pipe wall thickness.", "sk": "Doplňte hrúbku steny potrubia.", "pl": "Podaj grubość ścianki rury."}, "err_count": {"cs": "Počet prostupů musí být kladné celé číslo.", "en": "Number of penetrations must be a positive integer.", "sk": "Počet prestupov musí byť kladné celé číslo.", "pl": "Liczba przejść musi być dodatnią liczbą całkowitą."}, "err_ins": {"cs": "Zadejte tloušťku elastomerové izolace.", "en": "Enter the elastomeric insulation thickness.", "sk": "Zadajte hrúbku elastomérovej izolácie.", "pl": "Podaj grubość izolacji elastomerowej."}, "err_floor": {"cs": "Pro strop je nutná odpovídající tloušťka konstrukce, zpravidla min. 150 mm.", "en": "A suitable floor thickness is required, typically at least 150 mm.", "sk": "Pre strop je potrebná zodpovedajúca hrúbka konštrukcie, spravidla min. 150 mm.", "pl": "Wymagana jest odpowiednia grubość stropu, zazwyczaj co najmniej 150 mm."}, "err_combo": {"cs": "Kombinace není v databázi ETA potvrzena.", "en": "Combination not confirmed by the ETA database.", "sk": "Kombinácia nie je potvrdená v databáze ETA.", "pl": "Kombinacja nie została potwierdzona w bazie ETA."}, "result_status": {"cs": "Vypočtená celková spotřeba", "en": "Calculated total consumption", "sk": "Vypočítaná celková spotreba", "pl": "Obliczone całkowite zużycie"}, "summary_result": {"cs": "{count} × prostup {place}, {totalUnits} ucpávek celkem", "en": "{count} × {place} penetration, {totalUnits} seals in total", "sk": "{count} × prestup {place}, spolu {totalUnits} upchávok", "pl": "{count} × przejście przez {place}, łącznie {totalUnits} uszczelnień"}, "floor_inst": {"cs": "stropem", "en": "floor", "sk": "stropom", "pl": "strop"}, "wall_inst": {"cs": "stěnou", "en": "wall", "sk": "stenou", "pl": "ścianę"}, "pcs": {"cs": "ks", "en": "pcs", "sk": "ks", "pl": "szt."}, "seal_am": {"cs": "Pacifyre® A nebo Pacifyre® FPM (viz ETA)", "en": "Pacifyre® A or Pacifyre® FPM (see ETA)", "sk": "Pacifyre® A alebo Pacifyre® FPM (pozri ETA)", "pl": "Pacifyre® A lub Pacifyre® FPM (zob. ETA)"}, "seal_a": {"cs": "Pacifyre® A – akrylátový tmel", "en": "Pacifyre® A – acrylic sealant", "sk": "Pacifyre® A – akrylátový tmel", "pl": "Pacifyre® A – uszczelniacz akrylowy"}, "seal_ref": {"cs": "Viz ETA / příloha", "en": "See ETA / annex", "sk": "Pozri ETA / prílohu", "pl": "Zob. ETA / załącznik"}, "formula_value": {"cs": "{metres} m + 0,020 m na ucpávku", "en": "{metres} m + 0.020 m per seal", "sk": "{metres} m + 0,020 m na upchávku", "pl": "{metres} m + 0,020 m na uszczelnienie"}, "page": {"cs": "str.", "en": "p.", "sk": "str.", "pl": "str."}, "extra_result": {"cs": "Zvolená řádka ETA: {src}. Schválená klasifikace EI {ei} {term}; zkontrolujte soulad s projektem a montážním detailem.{minfloor} Pokud se objevuje více schválených variant, kalkulačka vybere variantu s nejmenším počtem vrstev splňující požadované EI.", "en": "Selected ETA record: {src}. Approved classification EI {ei} {term}; verify compatibility with the design and installation detail.{minfloor} If multiple approved options exist, the calculator chooses the fewest layers meeting the required EI.", "sk": "Zvolený záznam ETA: {src}. Schválená klasifikácia EI {ei} {term}; overte súlad s projektom a montážnym detailom.{minfloor} Ak existuje viac schválených možností, kalkulačka vyberie najmenší počet vrstiev spĺňajúci požadované EI.", "pl": "Wybrany wpis ETA: {src}. Zatwierdzona klasyfikacja EI {ei} {term}; sprawdź zgodność z projektem i szczegółami montażu.{minfloor} Gdy istnieje kilka zatwierdzonych wariantów, kalkulator wybiera wariant o najmniejszej liczbie warstw spełniający wymagane EI."}, "extra_floor": {"cs": " Minimální tloušťka stropu více než 200 mm.", "en": " Minimum floor thickness exceeds 200 mm.", "sk": " Minimálna hrúbka stropu viac ako 200 mm.", "pl": " Minimalna grubość stropu ponad 200 mm."}, "copy_empty": {"cs": "Nejprve vyplňte schválenou kombinaci.", "en": "Enter an approved combination first.", "sk": "Najprv vyplňte schválenú kombináciu.", "pl": "Najpierw wprowadź zatwierdzoną kombinację."}, "copied": {"cs": "Výsledek zkopírován.", "en": "Result copied.", "sk": "Výsledok skopírovaný.", "pl": "Wynik skopiowany."}, "copy_prompt": {"cs": "Zkopírujte výsledek:", "en": "Copy the result:", "sk": "Skopírujte výsledok:", "pl": "Skopiuj wynik:"}, "copy_value": {"cs": "Pacifyre {prod} | {place} | {pipe} Ø {d} × {w} mm | izolace {ins} {th} mm | {classification} | vrstvy {layers} | {one} m / ucpávku | počet prostupů {count} | celkem {total} m | {src}", "en": "Pacifyre {prod} | {place} | {pipe} Ø {d} × {w} mm | insulation {ins} {th} mm | {classification} | layers {layers} | {one} m / seal | penetrations {count} | total {total} m | {src}", "sk": "Pacifyre {prod} | {place} | {pipe} Ø {d} × {w} mm | izolácia {ins} {th} mm | {classification} | vrstvy {layers} | {one} m / upchávku | prestupy {count} | spolu {total} m | {src}", "pl": "Pacifyre {prod} | {place} | {pipe} Ø {d} × {w} mm | izolacja {ins} {th} mm | {classification} | warstwy {layers} | {one} m / uszczelnienie | przejścia {count} | razem {total} m | {src}"}};
+let lang='cs';
+const originalTextNodes=[];
+(function captureOriginalText(){const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let node;while(node=walker.nextNode()){if(node.parentNode.closest('script,style'))continue;const raw=node.nodeValue;const normalized=raw.trim();if(normalized&&I18N_STATIC[normalized])originalTextNodes.push({node,raw,normalized});}})();
+function t(key,vars={}){let v=(I18N_DYNAMIC[key]||{})[lang]||(I18N_DYNAMIC[key]||{}).cs||key;return v.replace(/\{(\w+)\}/g,(_,name)=>String(vars[name]??''));}
+function setLanguage(newLanguage){lang=['cs','en','sk','pl'].includes(newLanguage)?newLanguage:'cs';document.documentElement.lang=lang;document.title=({cs:'Pacifyre | Kalkulačka spotřeby protipožární pásky IWM / FPW',en:'Pacifyre | Fire protection wrap calculator IWM / FPW',sk:'Pacifyre | Kalkulačka spotreby protipožiarnej pásky IWM / FPW',pl:'Pacifyre | Kalkulator zużycia taśmy ogniochronnej IWM / FPW'})[lang];$('language').value=lang;for(const o of originalTextNodes){const translated=(I18N_STATIC[o.normalized]||{})[lang]||o.normalized;o.node.nodeValue=o.raw.replace(o.normalized,translated);}const placeholderWall={cs:'např. 3,4',en:'e.g. 3.4',sk:'napr. 3,4',pl:'np. 3,4'};$('wall').placeholder=placeholderWall[lang];refreshIns();calculate();}
+const $=id=>document.getElementById(id);
+const ROLL_LENGTH={IWM:12.5,FPW:9.2};
+function syncRollLength(){ $('roll').value=String(ROLL_LENGTH[st.product]); }
+$('language').addEventListener('change',e=>setLanguage(e.target.value));
+const fmt=(x,d=3)=>Number(x).toLocaleString(({cs:'cs-CZ',en:'en-GB',sk:'sk-SK',pl:'pl-PL'})[lang]||'cs-CZ',{minimumFractionDigits:d,maximumFractionDigits:d});const st={product:'IWM',construction:'strop'};const commonDiam=[16,20,25,32,40,50,63,75,90,110,125,160,200];
+function bounds(v,x){if(typeof v==='number')return Math.abs(v-x)<.0001;return x>=v[0]-(v[2]?-.000001:0) && x<=v[1]+(v[3]?-.000001:0) && (!v[2] || x>v[0]+.000001)&&(!v[3]||x<v[1]-.000001)}
+function elig(){return DATA.filter(r=>r.product===st.product&&r.construction===st.construction)}
+function unique(a){return [...new Set(a)].sort((a,b)=>String(a).localeCompare(String(b),'cs',{numeric:true}))}
+function optionSet(id,values,keep=true){let e=$(id),v=e.value;e.replaceChildren(...values.map(x=>{let op=document.createElement('option');op.value=x[0];op.textContent=x[1];return op}));if(keep&&values.some(x=>x[0]===v))e.value=v}
+function pipeNames(){optionSet('pipe',unique(elig().map(r=>r.pipe)).map(v=>[v,v]));refillPipe()}
+function dimsFrom(record){if(typeof record.diam==='number')return [record.diam];return commonDiam.filter(d=>bounds(record.diam,d))}
+function refillPipe(){const match=elig().filter(r=>r.pipe===$('pipe').value);let diam=unique(match.flatMap(dimsFrom).map(String)).sort((a,b)=>Number(a)-Number(b));optionSet('diameter',diam.map(d=>[d,d+' mm']));if(!diam.length){optionSet('diameter',[])};refreshIns()}
+function refreshIns(){const pipe=$('pipe').value,dm=Number($('diameter').value);let types=unique(elig().filter(r=>r.pipe===pipe && bounds(r.diam,dm)).map(r=>r.ins));if(!types.length)types=['bez'];types.sort((a,b)=>(a==='bez'?-1:b==='bez'?1:0));optionSet('ins',types.map(k=>[k,t('ins_'+k)]));setIns()}
+function setIns(){let t=$('ins').value;const inp=$('thickness');inp.disabled=t==='bez'||t==='PE';if(t==='bez')inp.value='0';else if(t==='PE')inp.value='4';else if(!Number(inp.value)||Number(inp.value)===4)inp.value='9.5';calculate()}
+function parseNumber(id){return Number(String($(id).value).replace(',','.'))}
+function closestChoice(r,dm,w,insT,insThick,ei,floor){return bounds(r.diam,dm)&&bounds(r.wall,w)&&r.ins===insT&&(insT!=='AF'||r.insrange&&bounds(r.insrange,insThick))&&r.ei>=ei&&(!r.minfloor||floor>=r.minfloor)}
+function updateResult(id,txt){$(id).textContent=txt}
+function calculate(){const prod=st.product,place=st.construction,pipe=$('pipe').value,d=parseNumber('diameter'),w=parseNumber('wall'),ins=$('ins').value,th=parseNumber('thickness'),ei=parseNumber('fire'),count=parseNumber('count'),floor=parseNumber('floorThick'),roll=ROLL_LENGTH[prod],isFloor=place==='strop';$('floorField').style.display=isFloor?'':'none';
+let options=elig().filter(r=>r.pipe===pipe&&bounds(r.diam,d)&&r.ins===ins),candidates=options.filter(r=>closestChoice(r,d,w,ins,th,ei,floor));
+const err=(message)=>{ $('result').classList.add('warn');updateResult('status',t('cannot_confirm'));updateResult('total',message);updateResult('summary',t('adjust_params'));['layers','one','seals','rolls','class','sealType','formula','origin'].forEach(id=>updateResult(id,'–'));$('extra').textContent=t('no_infer');window.lastResult=null;};
+if(!Number.isFinite(d)||d<=0)return err(t('err_diameter'));if(!(w>0))return err(t('err_wall'));if(!Number.isInteger(count)||count<=0)return err(t('err_count'));if(ins==='AF'&&!(th>0))return err(t('err_ins'));if(isFloor&&(!(floor>=150)))return err(t('err_floor'));if(!candidates.length)return err(t('err_combo'));
+// Least material among records meeting EI minimum; show precise achieved class and data source.
+candidates.sort((a,b)=>a.layers-b.layers||b.ei-a.ei||a.page-b.page);const r=candidates[0],units=isFloor?1:2,totalUnits=units*count,baseDiameter=d+2*th,geometric=Math.PI*(r.layers*baseDiameter+2*r.layers*(r.layers-1)),one=(geometric+20)/1000,total=one*totalUnits,roundedOne=Math.ceil(one*1000-1e-9)/1000,roundedTotal=Math.ceil(total*1000-1e-9)/1000,rolls=Math.ceil(total/roll),src=`${prod==='IWM'?'ETA-18/0918':'ETA-22/0022'}, ${t('page')} ${r.page}`;
+$('result').classList.remove('warn');updateResult('status',t('result_status'));updateResult('total',fmt(roundedTotal)+' m');updateResult('summary',t('summary_result',{count,place:t(isFloor?'floor_inst':'wall_inst'),totalUnits}));updateResult('layers',r.layers+'×');updateResult('one',fmt(roundedOne)+' m');updateResult('seals',totalUnits+' '+t('pcs'));updateResult('rolls',rolls+' '+t('pcs'));updateResult('class',`EI ${r.ei} ${r.term}`);updateResult('sealType',r.seal==='A+M'?t('seal_am'):r.seal==='A'?t('seal_a'):r.seal||t('seal_ref'));updateResult('formula',t('formula_value',{metres:fmt(geometric/1000,3)}));updateResult('origin',src);$('extra').textContent=t('extra_result',{src,ei:r.ei,term:r.term,minfloor:r.minfloor?t('extra_floor'):''});
+window.lastResult={prod,place,pipe,d,w,ins,th,ei,count,layers:r.layers,one:roundedOne,total:roundedTotal,class:`EI ${r.ei} ${r.term}`,src,rolls};}
+for(let name of ['product','construction']){const sel=$(name+'Choice');sel.addEventListener('click',e=>{const btn=e.target.closest('button[data-value]');if(!btn)return;st[name]=btn.dataset.value;sel.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b===btn));if(name==='product')syncRollLength();pipeNames();calculate()})}
+$('pipe').addEventListener('change',refillPipe);$('diameter').addEventListener('change',refreshIns);$('ins').addEventListener('change',setIns);for(let id of ['wall','thickness','fire','count','floorThick','roll'])$(id).addEventListener('input',calculate);
+$('print').addEventListener('click',()=>window.print());$('copy').addEventListener('click',()=>{let r=window.lastResult;if(!r)return alert(t('copy_empty'));let msg=t('copy_value',{prod:r.prod,place:t(r.place==='strop'?'floor_inst':'wall_inst'),pipe:r.pipe,d:r.d,w:r.w,ins:t('ins_'+r.ins),th:r.th,classification:r.class,layers:r.layers,one:r.one,count:r.count,total:r.total,src:r.src});navigator.clipboard?.writeText(msg).then(()=>alert(t('copied'))).catch(()=>window.prompt(t('copy_prompt'),msg))||window.prompt(t('copy_prompt'),msg)});
+syncRollLength();pipeNames();$('pipe').value='PVC-U';refillPipe();$('diameter').value='110';refreshIns();$('ins').value='bez';setIns();$('wall').value='5.3';setLanguage(((navigator.languages&&navigator.languages[0])||navigator.language||'cs').toLowerCase().split('-')[0]);
+</script></body></html>
